@@ -21,7 +21,7 @@ obj = stl_mesh.Mesh.from_file(file_loc)
 #axes.auto_scale_xyz(scale, scale, scale)
 
 plane_normal = [1,0,0] # The plane normal vector
-plane_origin = [-0.8,0,0] # A point on the plane
+plane_origin = [0.5,0,0] # A point on the plane
 
 plane = [plane_origin, plane_normal]  # A plane facing right
 
@@ -67,7 +67,9 @@ for i in range(len(goes_through)):
                 print(obj.vectors[i][x], obj.vectors[i][0])
                 slice_points[curr_point] = obj.vectors[i][x]
                 slice_points[curr_point+1] = obj.vectors[i][x+1]
-            
+        
+slice_points = np.round(slice_points, decimals=5)
+
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.scatter(slice_points[:,0], slice_points[:,1], slice_points[:,2])
