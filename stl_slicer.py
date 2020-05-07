@@ -8,20 +8,20 @@ Created on Wed May  6 20:41:44 2020
 import numpy as np
 from stl import mesh as stl_mesh
 from mpl_toolkits import mplot3d
-from matplotlib import pyplot
+from matplotlib import pyplot as plt
 
 file_loc = "5s.stl"
-
-figure = pyplot.figure()
-axes = mplot3d.Axes3D(figure)
-
+#
+#figure = pyplot.figure()
+#axes = mplot3d.Axes3D(figure)
+#
 obj = stl_mesh.Mesh.from_file(file_loc)
-axes.add_collection3d(mplot3d.art3d.Poly3DCollection(obj.vectors))
-scale = obj.points.flatten(-1)
-axes.auto_scale_xyz(scale, scale, scale)
+#axes.add_collection3d(mplot3d.art3d.Poly3DCollection(obj.vectors))
+#scale = obj.points.flatten(-1)
+#axes.auto_scale_xyz(scale, scale, scale)
 
 plane_normal = [1,0,0] # The plane normal vector
-plane_origin = [0,0,0] # A point on the plane
+plane_origin = [-0.8,0,0] # A point on the plane
 
 plane = [plane_origin, plane_normal]  # A plane facing right
 
@@ -68,5 +68,7 @@ for i in range(len(goes_through)):
                 slice_points[curr_point] = obj.vectors[i][x]
                 slice_points[curr_point+1] = obj.vectors[i][x+1]
             
-
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(slice_points[:,0], slice_points[:,1], slice_points[:,2])
 #pyplot.plot()
