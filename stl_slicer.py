@@ -7,70 +7,118 @@ Created on Wed May  6 20:41:44 2020
 
 import numpy as np
 from stl import mesh as stl_mesh
-from mpl_toolkits import mplot3d
+# from mpl_toolkits import mplot3d
 from matplotlib import pyplot as plt
 
+
+class make_slice:
+
+    def __init__(self, obj, plane):
+        self.obj = obj
+        self.plane = plane
+        self.plane_origin = plane[0]
+        self.plane_normal = plane[1]
+        self.distance_from_plane = np.dot((self.obj.vectors-self.plane[0]),
+                                          self.plane[1])
+        self.run()
+
+    def run(self):
+        v0 = np.vstack(np.sign(self.distance_from_plane[:, 0] *
+                               self.distance_from_plane[:, 1]))
+        v1 = np.vstack(np.sign(self.distance_from_plane[:, 1] *
+                               self.distance_from_plane[:, 2]))
+        v2 = np.vstack(np.sign(self.distance_from_plane[:, 2] *
+                               self.distance_from_plane[:, 0]))
+
+        goes_through = np.concatenate([v0, v1, v2], 1)
+        self.num_points = (np.sum(goes_through == 0) * 2 +
+                           np.sum(goes_through == -1))
+
+        self.slice_points = np.zeros((self.num_points, 3))
+        curr_point = 0
+
+        for i in range(len(goes_through)):
+            for x in range(len(goes_through[i])):
+                if goes_through[i][x] == -1:
+                    # The line goes through the plane
+                    # There is a point which lies in the plane, which is r
+                    # amounts of vector V away from point P0
+                    p0 = self.obj.vectors[i][x]
+                    if x == 0 or x == 1:
+                        V = self.obj.vectors[i][x]-self.obj.vectors[i][x+1]
+                    else:
+                        V = self.obj.vectors[i][x]-self.obj.vectors[i][0]
+                    d = (np.dot((self.plane_origin-p0), self.plane_normal) /
+                         (np.dot(V, self.plane_normal)))
+                    P = p0 + d*V
+#                    print(P)
+                    self.slice_points[curr_point] = P
+                    curr_point += 1
+
+                if goes_through[i][x] == 0:
+                    # Both points on the line lie exaclty on the plane
+                    if x == 0 or x == 1:
+#                        print(obj.vectors[i][x], self.obj.vectors[i][x+1])
+                        self.slice_points[curr_point] = self.obj.vectors[i][x]
+                        self.slice_points[curr_point+1] = self.obj.vectors[i][x+1]
+                    else:
+#                        print(obj.vectors[i][x], self.obj.vectors[i][0])
+                        self.slice_points[curr_point] = self.obj.vectors[i][x]
+                        self.slice_points[curr_point+1] = self.obj.vectors[i][0]
+
+        self.slice_points = np.round(self.slice_points, decimals=5)
+        self.slice_points = np.unique(self.slice_points, axis=0)
+
+
 file_loc = "5s.stl"
-#
-#figure = pyplot.figure()
-#axes = mplot3d.Axes3D(figure)
-#
+
 obj = stl_mesh.Mesh.from_file(file_loc)
-#axes.add_collection3d(mplot3d.art3d.Poly3DCollection(obj.vectors))
-#scale = obj.points.flatten(-1)
-#axes.auto_scale_xyz(scale, scale, scale)
 
-plane_normal = [1,0,0] # The plane normal vector
-plane_origin = [0.5,0,0] # A point on the plane
-
+plane_normal = [1, 0, 0]  # The plane normal vector
+plane_origin = [0, 0, 0]  # A point on the plane
 plane = [plane_origin, plane_normal]  # A plane facing right
 
-distance_from_plane = np.dot((obj.vectors-plane[0]), plane[1])
-
-v0 = np.vstack(np.sign(distance_from_plane[:, 0] * distance_from_plane[:, 1]))
-v1 = np.vstack(np.sign(distance_from_plane[:, 1] * distance_from_plane[:, 2]))
-v2 = np.vstack(np.sign(distance_from_plane[:, 2] * distance_from_plane[:, 0]))
-
-goes_through = np.concatenate([v0, v1, v2], 1)
-# If the value is 0, the vector lies on the plane
-# If the value is 1, the vector is completely off the plane
-# If the value is -1, the vector goes through the plane
-num_points = np.sum(goes_through == 0) * 2 + np.sum(goes_through == -1)
-
-slice_points = np.zeros((num_points, 3))
-curr_point = 0
-
-for i in range(len(goes_through)):
-    for x in range(len(goes_through[i])):
-        if goes_through[i][x] == -1:
-            # The line goes through the plane
-            # There is a point which lies in the plane, which is r amounts 
-            # of vector V away from point P0
-            p0 = obj.vectors[i][x]
-            if x == 0 or x==1:
-                V = obj.vectors[i][x]-obj.vectors[i][x+1]
-            else:
-                V = obj.vectors[i][x]-obj.vectors[i][0]
-            d = np.dot((plane_origin-p0), plane_normal)/(np.dot(V, plane_normal))
-            P = p0 + d*V
-            print(P)
-            slice_points[curr_point] = P
-            curr_point += 1
-        
-        if goes_through[i][x] == 0:
-            # Both points on the line lie exaclty on the plane
-            if x==0 or x==1:
-                print(obj.vectors[i][x], obj.vectors[i][x+1])
-                slice_points[curr_point] = obj.vectors[i][x]
-                slice_points[curr_point+1] = obj.vectors[i][x+1]
-            else:
-                print(obj.vectors[i][x], obj.vectors[i][0])
-                slice_points[curr_point] = obj.vectors[i][x]
-                slice_points[curr_point+1] = obj.vectors[i][x+1]
-        
-slice_points = np.round(slice_points, decimals=5)
+hull_slice = make_slice(obj, plane)
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-ax.scatter(slice_points[:,0], slice_points[:,1], slice_points[:,2])
-#pyplot.plot()
+ax.scatter(hull_slice.slice_points[:, 0],
+           hull_slice.slice_points[:, 1],
+           hull_slice.slice_points[:, 2])
+
+plane_normal = [1, 0, 0]  # The plane normal vector
+plane_origin = [0.5, 0, 0]  # A point on the plane
+plane = [plane_origin, plane_normal]  # A plane facing right
+
+hull_slice = make_slice(obj, plane)
+ax.scatter(hull_slice.slice_points[:, 0],
+           hull_slice.slice_points[:, 1],
+           hull_slice.slice_points[:, 2])
+
+plane_normal = [1, 0, 0]  # The plane normal vector
+plane_origin = [-0.5, 0, 0]  # A point on the plane
+plane = [plane_origin, plane_normal]  # A plane facing right
+
+hull_slice = make_slice(obj, plane)
+ax.scatter(hull_slice.slice_points[:, 0],
+           hull_slice.slice_points[:, 1],
+           hull_slice.slice_points[:, 2])
+
+plane_normal = [1, 0, 0]  # The plane normal vector
+plane_origin = [0.8, 0, 0]  # A point on the plane
+plane = [plane_origin, plane_normal]  # A plane facing right
+
+hull_slice = make_slice(obj, plane)
+ax.scatter(hull_slice.slice_points[:, 0],
+           hull_slice.slice_points[:, 1],
+           hull_slice.slice_points[:, 2])
+
+plane_normal = [1, 0, 0]  # The plane normal vector
+plane_origin = [0.8, 0, 0]  # A point on the plane
+plane = [plane_origin, plane_normal]  # A plane facing right
+
+hull_slice = make_slice(obj, plane)
+ax.scatter(hull_slice.slice_points[:, 0],
+           hull_slice.slice_points[:, 1],
+           hull_slice.slice_points[:, 2])
+
