@@ -3,6 +3,17 @@
 Created on Wed May  6 20:41:44 2020
 
 @author: mclea
+
+This class takes a stl object and can slice it at any plane to create a 2D
+cross section.
+
+Classes:
+    make_slice()
+
+Methods:
+
+Imports:
+    numpy, mesh from stl
 """
 
 import numpy as np
@@ -12,17 +23,39 @@ from matplotlib import pyplot as plt
 
 
 class make_slice:
+    """
+    Slice class
+
+    Attributes:
+        slice_points    --  An array of all the points in a slice of the stl
+                            object
+    """
 
     def __init__(self, obj, plane):
+        """Initialise a slice of an stl object at a plane
+
+        Inputs:
+            obj     --  An stl.mesh object
+            plane   --  A plane array in the format [P,N] where P is a position
+                        on the plane and N is the normal vector
+        
+        Example:
+            hull_slice = make_slice(stl_object, [[0,0,0],[1,0,0]]) # make a slice of the stl file
+        """
         self.obj = obj
         self.plane = plane
         self.plane_origin = plane[0]
         self.plane_normal = plane[1]
         self.distance_from_plane = np.dot((self.obj.vectors-self.plane[0]),
                                           self.plane[1])
-        self.run()
+        self.slice_points = []
 
-    def run(self):
+        self.calculate_points()
+
+    def calculate_points(self):
+        """Calculate the points on a slice of an stl file
+        """
+
         v0 = np.vstack(np.sign(self.distance_from_plane[:, 0] *
                                self.distance_from_plane[:, 1]))
         v1 = np.vstack(np.sign(self.distance_from_plane[:, 1] *
