@@ -18,7 +18,6 @@ Imports:
 
 import numpy as np
 from stl import mesh as stl_mesh
-# from mpl_toolkits import mplot3d
 from matplotlib import pyplot as plt
 
 
@@ -38,7 +37,9 @@ class make_slice:
             obj     --  An stl.mesh object
             plane   --  A plane array in the format [P,N] where P is a position
                         on the plane and N is the normal vector
-        
+        Outputs:
+            A slice of a hull
+
         Example:
             hull_slice = make_slice(stl_object, [[0,0,0],[1,0,0]]) # make a slice of the stl file
         """
