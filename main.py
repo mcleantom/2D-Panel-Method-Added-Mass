@@ -21,18 +21,19 @@ plane = [plane_origin, plane_normal]  # A plane facing right
 
 hull_slice = make_slice(obj, plane)
 
-# fig = plt.figure()
-# ax = fig.add_subplot(111, projection='3d')
-# ax.scatter(hull_slice.slice_points[:, 0],
+#fig = plt.figure()
+#ax = fig.add_subplot(111, projection='3d')
+#ax.scatter(hull_slice.slice_points[:, 0],
 #           hull_slice.slice_points[:, 1],
 #           hull_slice.slice_points[:, 2])
 
 x = np.flip(hull_slice.slice_points[:, 1])
 y = np.flip(hull_slice.slice_points[:, 2])
 
-geom = vp.make_spline(500, x, y)
+geom = vp.make_spline(101, x, y)
 geom.plot('-o')
 
 alpha = np.pi/2
 geom.solve_gamma(alpha)
-geom.plot_flow()
+#geom.plot()
+geom.plot_flow(size=0.2)
