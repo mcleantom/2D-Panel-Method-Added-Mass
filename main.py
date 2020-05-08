@@ -4,16 +4,12 @@ Created on Fri May  8 10:29:53 2020
 
 @author: mclea
 """
-import os
-import sys
-module_path = os.path.abspath(os.path.join('..'))
-if module_path not in sys.path:
-    sys.path.append(module_path)
-
 from stl import mesh as stl_mesh
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
+# from mpl_toolkits.mplot3d import Axes3D
 from stl_slicer import make_slice
 from vortexpanel import VortexPanel as vp
+import numpy as np
 
 file_loc = "5s.stl"
 
@@ -25,8 +21,18 @@ plane = [plane_origin, plane_normal]  # A plane facing right
 
 hull_slice = make_slice(obj, plane)
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.scatter(hull_slice.slice_points[:, 0],
-           hull_slice.slice_points[:, 1],
-           hull_slice.slice_points[:, 2])
+# fig = plt.figure()
+# ax = fig.add_subplot(111, projection='3d')
+# ax.scatter(hull_slice.slice_points[:, 0],
+#           hull_slice.slice_points[:, 1],
+#           hull_slice.slice_points[:, 2])
+
+x = np.flip(hull_slice.slice_points[:, 1])
+y = np.flip(hull_slice.slice_points[:, 2])
+
+geom = vp.make_spline(500, x, y)
+geom.plot('-o')
+
+alpha = np.pi/2
+geom.solve_gamma(alpha)
+geom.plot_flow()
