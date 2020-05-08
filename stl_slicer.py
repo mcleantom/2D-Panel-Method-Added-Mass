@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed May  6 20:41:44 2020
-
-@author: mclea
-
 This class takes a stl object and can slice it at any plane to create a 2D
 cross section.
 
@@ -104,55 +100,55 @@ class make_slice:
         self.slice_points = np.unique(self.slice_points, axis=0)
 
 
-file_loc = "5s.stl"
-
-obj = stl_mesh.Mesh.from_file(file_loc)
-
-plane_normal = [1, 0, 0]  # The plane normal vector
-plane_origin = [0, 0, 0]  # A point on the plane
-plane = [plane_origin, plane_normal]  # A plane facing right
-
-hull_slice = make_slice(obj, plane)
-
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.scatter(hull_slice.slice_points[:, 0],
-           hull_slice.slice_points[:, 1],
-           hull_slice.slice_points[:, 2])
-
-plane_normal = [1, 0, 0]  # The plane normal vector
-plane_origin = [0.5, 0, 0]  # A point on the plane
-plane = [plane_origin, plane_normal]  # A plane facing right
-
-hull_slice = make_slice(obj, plane)
-ax.scatter(hull_slice.slice_points[:, 0],
-           hull_slice.slice_points[:, 1],
-           hull_slice.slice_points[:, 2])
-
-plane_normal = [1, 0, 0]  # The plane normal vector
-plane_origin = [-0.5, 0, 0]  # A point on the plane
-plane = [plane_origin, plane_normal]  # A plane facing right
-
-hull_slice = make_slice(obj, plane)
-ax.scatter(hull_slice.slice_points[:, 0],
-           hull_slice.slice_points[:, 1],
-           hull_slice.slice_points[:, 2])
-
-plane_normal = [1, 0, 0]  # The plane normal vector
-plane_origin = [0.8, 0, 0]  # A point on the plane
-plane = [plane_origin, plane_normal]  # A plane facing right
-
-hull_slice = make_slice(obj, plane)
-ax.scatter(hull_slice.slice_points[:, 0],
-           hull_slice.slice_points[:, 1],
-           hull_slice.slice_points[:, 2])
-
-plane_normal = [1, 0, 0]  # The plane normal vector
-plane_origin = [0.8, 0, 0]  # A point on the plane
-plane = [plane_origin, plane_normal]  # A plane facing right
-
-hull_slice = make_slice(obj, plane)
-ax.scatter(hull_slice.slice_points[:, 0],
-           hull_slice.slice_points[:, 1],
-           hull_slice.slice_points[:, 2])
-
+#file_loc = "5s.stl"
+#
+#obj = stl_mesh.Mesh.from_file(file_loc)
+#
+#plane_normal = [1, 0, 0]  # The plane normal vector
+#plane_origin = [0, 0, 0]  # A point on the plane
+#plane = [plane_origin, plane_normal]  # A plane facing right
+#
+#hull_slice = make_slice(obj, plane)
+#
+#fig = plt.figure()
+#ax = fig.add_subplot(111, projection='3d')
+#ax.scatter(hull_slice.slice_points[:, 0],
+#           hull_slice.slice_points[:, 1],
+#           hull_slice.slice_points[:, 2])
+#
+#plane_normal = [1, 0, 0]  # The plane normal vector
+#plane_origin = [0.5, 0, 0]  # A point on the plane
+#plane = [plane_origin, plane_normal]  # A plane facing right
+#
+#hull_slice = make_slice(obj, plane)
+#ax.scatter(hull_slice.slice_points[:, 0],
+#           hull_slice.slice_points[:, 1],
+#           hull_slice.slice_points[:, 2])
+#
+#plane_normal = [1, 0, 0]  # The plane normal vector
+#plane_origin = [-0.5, 0, 0]  # A point on the plane
+#plane = [plane_origin, plane_normal]  # A plane facing right
+#
+#hull_slice = make_slice(obj, plane)
+#ax.scatter(hull_slice.slice_points[:, 0],
+#           hull_slice.slice_points[:, 1],
+#           hull_slice.slice_points[:, 2])
+#
+#plane_normal = [1, 0, 0]  # The plane normal vector
+#plane_origin = [0.8, 0, 0]  # A point on the plane
+#plane = [plane_origin, plane_normal]  # A plane facing right
+#
+#hull_slice = make_slice(obj, plane)
+#ax.scatter(hull_slice.slice_points[:, 0],
+#           hull_slice.slice_points[:, 1],
+#           hull_slice.slice_points[:, 2])
+#
+#plane_normal = [1, 0, 0]  # The plane normal vector
+#plane_origin = [0.8, 0, 0]  # A point on the plane
+#plane = [plane_origin, plane_normal]  # A plane facing right
+#
+#hull_slice = make_slice(obj, plane)
+#ax.scatter(hull_slice.slice_points[:, 0],
+#           hull_slice.slice_points[:, 1],
+#           hull_slice.slice_points[:, 2])
+#
