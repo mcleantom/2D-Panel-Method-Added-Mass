@@ -13,8 +13,6 @@ Imports:
 """
 
 import numpy as np
-from stl import mesh as stl_mesh
-from matplotlib import pyplot as plt
 
 
 class make_slice:
@@ -48,6 +46,8 @@ class make_slice:
         self.slice_points = []
 
         self.calculate_points()
+        
+        return None
 
     def calculate_points(self):
         """Calculate the points on a slice of an stl file
@@ -81,74 +81,20 @@ class make_slice:
                     d = (np.dot((self.plane_origin-p0), self.plane_normal) /
                          (np.dot(V, self.plane_normal)))
                     P = p0 + d*V
-#                    print(P)
                     self.slice_points[curr_point] = P
                     curr_point += 1
 
                 if goes_through[i][x] == 0:
-                    # Both points on the line lie exaclty on the plane
                     if x == 0 or x == 1:
-#                        print(obj.vectors[i][x], self.obj.vectors[i][x+1])
                         self.slice_points[curr_point] = self.obj.vectors[i][x]
                         self.slice_points[curr_point+1] = self.obj.vectors[i][x+1]
                     else:
-#                        print(obj.vectors[i][x], self.obj.vectors[i][0])
                         self.slice_points[curr_point] = self.obj.vectors[i][x]
                         self.slice_points[curr_point+1] = self.obj.vectors[i][0]
 
         self.slice_points = np.round(self.slice_points, decimals=5)
         self.slice_points = np.unique(self.slice_points, axis=0)
-
-
-#file_loc = "5s.stl"
-#
-#obj = stl_mesh.Mesh.from_file(file_loc)
-#
-#plane_normal = [1, 0, 0]  # The plane normal vector
-#plane_origin = [0, 0, 0]  # A point on the plane
-#plane = [plane_origin, plane_normal]  # A plane facing right
-#
-#hull_slice = make_slice(obj, plane)
-#
-#fig = plt.figure()
-#ax = fig.add_subplot(111, projection='3d')
-#ax.scatter(hull_slice.slice_points[:, 0],
-#           hull_slice.slice_points[:, 1],
-#           hull_slice.slice_points[:, 2])
-#
-#plane_normal = [1, 0, 0]  # The plane normal vector
-#plane_origin = [0.5, 0, 0]  # A point on the plane
-#plane = [plane_origin, plane_normal]  # A plane facing right
-#
-#hull_slice = make_slice(obj, plane)
-#ax.scatter(hull_slice.slice_points[:, 0],
-#           hull_slice.slice_points[:, 1],
-#           hull_slice.slice_points[:, 2])
-#
-#plane_normal = [1, 0, 0]  # The plane normal vector
-#plane_origin = [-0.5, 0, 0]  # A point on the plane
-#plane = [plane_origin, plane_normal]  # A plane facing right
-#
-#hull_slice = make_slice(obj, plane)
-#ax.scatter(hull_slice.slice_points[:, 0],
-#           hull_slice.slice_points[:, 1],
-#           hull_slice.slice_points[:, 2])
-#
-#plane_normal = [1, 0, 0]  # The plane normal vector
-#plane_origin = [0.8, 0, 0]  # A point on the plane
-#plane = [plane_origin, plane_normal]  # A plane facing right
-#
-#hull_slice = make_slice(obj, plane)
-#ax.scatter(hull_slice.slice_points[:, 0],
-#           hull_slice.slice_points[:, 1],
-#           hull_slice.slice_points[:, 2])
-#
-#plane_normal = [1, 0, 0]  # The plane normal vector
-#plane_origin = [0.8, 0, 0]  # A point on the plane
-#plane = [plane_origin, plane_normal]  # A plane facing right
-#
-#hull_slice = make_slice(obj, plane)
-#ax.scatter(hull_slice.slice_points[:, 0],
-#           hull_slice.slice_points[:, 1],
-#           hull_slice.slice_points[:, 2])
-#
+        
+        return None
+        
+    
